@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include "PWM.h"
+#include "Motor.h"
 
 void PWM_Init(int d) {
 
@@ -10,10 +12,12 @@ void Motor_Init() {
 
   // Motor Ports
   DDRB |= 0x10; // sets PB4 as output (Sleep Pin) 
-  PORTB |= 0x10; // sets PB4 low
+  PORTB |= 0x10; // sets PB4 low initially
 
   // Input Pins for the DRV8833
   DDRH |= 0x78; // sets as input
+  PORTH &= ~0x78; // sets all pins low initially
+
 }
 
 void Motor_Stop() {
