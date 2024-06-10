@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include "PWM.h"
 #include "Motor.h"
+#include <Arduino.h>
 
 void Motor_Init() {
 
@@ -11,7 +12,6 @@ void Motor_Init() {
   PORTB |= 0x10; // sets PB4 low initially
 
   // Input Pins for the DRV8833
-  DDRH |= 0x78; // sets as input
   PORTH &= ~0x78; // sets all pins low initially
   
 }
