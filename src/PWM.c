@@ -4,38 +4,36 @@
 
 void PWM_Init(uint16_t period){
 
-  DDRB |= 0x60; // sets PB5-PB6 as output (OC1A, OC1B)
-  DDRE |= 0x30; // sets PE4-PE5 as output (OC3B, OC3C)
+  DDRH |= 0x18; // sets PB5-PB6 as output (OC3A, OC3B)
+  DDRE |= 0x30; // sets PE4-PE5 as output (OC4B, OC4C)
 
-  TIMSK3 &= ~(0x0); // disables interupts on timer1
-  TIMSK4 &= ~(0x0); // disables interupts on timer3
-  OCR3A = period-1;
-  OCR3B = period-1;
-  OCR4B = period-1;
-  OCR4C = period-1;
+  TIMSK3 &= ~(0x0); // disables interupts on timer3
+  TIMSK4 &= ~(0x0); // disables interupts on timer4
+
+  // sets top value
+  ICR3 = period - 1;
+  ICR4 = period - 1;
 
   // Timer3
-  TCCR3A &= ~(0xF3); // Clears WGM bits, COM1A bits, and COM1B bits 
-  TCCR3A |= 0xF3; // sets WGM bits(11), COM1A bits(11), and COM1B bits(11) 
-                  // makes pins OC1A and OC1B able to generate PWM signals
-  TCCR3B &= ~(0x41); // Clears WGM bits, and CSn bits                
-  TCCR3B |= 0x41; // sets WGM bits(10), and CSn bits(001)
+  TCCR3A &= ~(0xA2); // Clears WGM bits, COM3A bits, and COM3B bits 
+  TCCR3A |= 0xA2; // WGM bits(10), COM3A bits(10), and COM3B bits(10), COM3C bits(00) 
+  TCCR3B &= ~(0x11); // Clears WGM bits, and CSn bits                
+  TCCR3B |= 0x11; // WGM bits(10), and CSn bits(001)
                   // (makes clock 16 MHz), and divides clock by 1 (no prescaling), respectively
   
   // Timer4
-  TCCR4A &= ~(0x3F); // Clears WGM bits, COM3B bits, and COM3C bits
-  TCCR4A |= 0x3F;    // sets WGM bits(11), COM1A bits(11), and COM1B bits(11)
-                     // makes pins OC3B and OC3C able to generate PWM signals
-  TCCR4B &= ~(0x41); // Clears WGM bits, and CSn bits                 
-  TCCR4B |= 0x41; // sets WGM bits(10), and CSn bits(001)
+  TCCR4A &= ~(0x2A); // Clears WGM bits, COM4B bits, and COM4C bits
+  TCCR4A |= 0x2A;    // WGM bits(10), COM4A bits (00), COM4B bits(10), and COM4C bits(10)
+  TCCR4B &= ~(0x11); // Clears WGM bits, and CSn bits                 
+  TCCR4B |= 0x11; // sets WGM bits(10), and CSn bits(001)
                   // (makes clock 16 MHz), and divides clock by 1 (no prescaling), respectively
   
+  OCR3A = 0;
+  OCR3B = 0;
+  OCR4B = 0;
+  OCR4C = 0;
 
-  
-  
-
-  
-  /*TIMER_A0->CCTL[0] = 0x0080;      // CCI0 toggle ( disables interrupts)
+  /*TIMER_A0->CCTL[0] = 0x0080;      // CCI0 toggle
   TIMER_A0->CCR[0] = period-1;       // Period is 2*period*8*83.33ns is 1.333*period
   TIMER_A0->EX0 = 0x0000;          // divide by 1
   TIMER_A0->CCTL[3] = 0x0040;      // CCR3 toggle/reset
