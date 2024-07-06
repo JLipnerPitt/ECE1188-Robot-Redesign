@@ -34,12 +34,12 @@ void PWM_Init(uint16_t period){
 }
 
 /*Left Motor:
-  OCR4A = Duty3 (IN3)
-  OCR4B = Duty4 (IN4)
+  OCR4A = Duty3 (IN3)(PH3)(PWM6)
+  OCR4B = Duty4 (IN4)(PH4)(PWM7)
   
   Right Motor:
-  OCR3B = Duty1 (IN1)
-  OCR3C = Duty2 (IN2)
+  OCR3B = Duty1 (IN1)(PE4)(PWM2)
+  OCR3C = Duty2 (IN2)(PE5)(PWM3)
 */
 void PWM_Duty(uint16_t Duty1, uint16_t Duty2, uint16_t Duty3, uint16_t Duty4){
 
